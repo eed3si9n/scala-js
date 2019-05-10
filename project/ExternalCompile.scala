@@ -81,9 +81,16 @@ object ExternalCompile {
 
           def doCompile(sourcesArgs: List[String]): Unit = {
             val run = (runner in compile).value
+            logger.info(s"""- compilerCp: $compilerCp
+                           |- cp: $cpStr
+                           |- d: ${classesDirectory.getAbsolutePath()}
+                           |- options: $options
+                           |- sourcesArgs: $sourcesArgs
+                           |""".stripMargin)
             val optErrorMsg = run.run("scala.tools.nsc.Main", compilerCp,
                 "-cp" :: cpStr ::
                 "-d" :: classesDirectory.getAbsolutePath() ::
+                "-Ylog-classpath" ::
                 options ++:
                 sourcesArgs,
                 patchedLogger)
